@@ -133,6 +133,12 @@ extern int __get_user_4(void);
 extern int __get_user_8(void);
 extern int __get_user_bad(void);
 
+#define __uaccess_begin_nospec()		\
+({						\
+	stac();					\
+	barrier_nospec();			\
+})
+
 /*
  * This is a type: either unsigned long, if the argument fits into
  * that type, or otherwise unsigned long long.
@@ -448,6 +454,10 @@ struct __large_struct { unsigned long buf[100]; };
 	current_thread_info()->uaccess_err = 0;				\
 	stac();								\
 	barrier();
+
+#define uaccess_try_nospec do {						\
+	current_thread_info()->uaccess_err = 0;                         \
+	__uaccess_begin_nospec()					\
 
 #define uaccess_catch(err)						\
 	clac();								\
