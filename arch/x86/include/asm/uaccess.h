@@ -133,6 +133,9 @@ extern int __get_user_4(void);
 extern int __get_user_8(void);
 extern int __get_user_bad(void);
 
+#define __uaccess_begin() stac()
+#define __uaccess_end()   clac()
+
 #define __uaccess_begin_nospec()		\
 ({						\
 	stac();					\
