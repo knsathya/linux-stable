@@ -427,6 +427,8 @@ sysenter_past_esp:
 sysenter_do_call:
 	cmpl $(NR_syscalls), %eax
 	jae sysenter_badsys
+	ALTERNATIVE_2 "", "mfence", X86_FEATURE_MFENCE_RDTSC, "lfence", \
+		      X86_FEATURE_LFENCE_RDTSC
 	call *sys_call_table(,%eax,4)
 sysenter_after_call:
 	movl %eax,PT_EAX(%esp)

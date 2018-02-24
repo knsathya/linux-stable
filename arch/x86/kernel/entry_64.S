@@ -256,6 +256,8 @@ system_call_fastpath:
 	cmpl $__NR_syscall_max,%eax
 #endif
 	ja	1f	/* return -ENOSYS (already in pt_regs->ax) */
+	sbb %r11, %r11  /* sanitize syscall_nr wrt speculation */
+	and %r11, %rax
 	movq %r10,%rcx
 	call *sys_call_table(,%rax,8)
 	movq %rax,RAX(%rsp)
