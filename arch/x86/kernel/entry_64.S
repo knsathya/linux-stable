@@ -324,6 +324,16 @@ tracesys:
 
 tracesys_phase2:
 	SAVE_EXTRA_REGS
+	/*
+	 * Clear extra registers that a speculation attack might
+	 * otherwise want to exploit.
+	 */
+	xorq %r15, %r15
+	xorq %r14, %r14
+	xorq %r13, %r13
+	xorq %r12, %r12
+	xorl %ebp, %ebp
+	xorl %ebx, %ebx
 	movq %rsp, %rdi
 	movl $AUDIT_ARCH_X86_64, %esi
 	movq %rax,%rdx
